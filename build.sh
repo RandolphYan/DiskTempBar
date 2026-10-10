@@ -66,11 +66,16 @@ cd "$DIR"
 SHA256_ZIP=$(shasum -a 256 "$ZIP_PATH" | awk '{print $1}')
 echo "    ✔ ZIP 便携包: $ZIP_PATH (SHA256: $SHA256_ZIP)"
 
-# 3.2 DMG 磁盘镜像
+# 3.2 DMG 磁盘镜像 (含 Applications 拖拽安装快捷方式)
 DMG_PATH="$RELEASE_DIR/${APP_NAME}-v${VERSION}.dmg"
-rm -f "$DMG_PATH"
-hdiutil create -volname "${APP_NAME}" -srcfolder "${APP_DIR}" -ov -format UDZO "$DMG_PATH" >/dev/null 2>&1 || true
-echo "    ✔ DMG 镜像:   $DMG_PATH"
+DMG_STAGING="/tmp/${APP_NAME}_dmg_staging"
+rm -rf "$DMG_STAGING" "$DMG_PATH"
+mkdir -p "$DMG_STAGING"
+cp -R "${APP_DIR}" "$DMG_STAGING/"
+ln -s /Applications "$DMG_STAGING/Applications"
+hdiutil create -volname "${APP_NAME}" -srcfolder "$DMG_STAGING" -ov -format UDZO "$DMG_PATH" >/dev/null 2>&1 || true
+rm -rf "$DMG_STAGING"
+echo "    ✔ DMG 镜像:   $DMG_PATH (含 Applications 拖拽快捷方式)"
 
 # 3.3 PKG 系统标准安装包
 PKG_PATH="$RELEASE_DIR/${APP_NAME}-v${VERSION}.pkg"
