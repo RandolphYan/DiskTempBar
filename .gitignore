@@ -1,0 +1,18 @@
+# macOS build artifacts
+DiskTempBar
+*.o
+*.dSYM
+*.app
+
+# Releases directory (uploaded to GitHub Releases)
+release/
+
+# OS generated files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Temporary files
+*.tmp
+*.log
