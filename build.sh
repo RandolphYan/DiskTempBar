@@ -53,6 +53,9 @@ cat << 'EOF' > "${APP_DIR}/Contents/Info.plist"
 </plist>
 EOF
 
+echo "==> 2.1 对应用包执行签名与资源封装 (Sealed Resources)..."
+codesign --force --deep --sign - "${APP_DIR}"
+
 echo "==> 3. 打包多种格式 Release 发布文件 (zip / dmg / pkg)..."
 mkdir -p "$RELEASE_DIR"
 
